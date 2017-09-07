@@ -1,12 +1,12 @@
 /********************************************
 *   Authors: Vignesh Jayaram
-*   Date Edited: 2 Sept 2017
+*   Date Edited: 9 Sept 2017
 *
 *   File: circbuff.h
 *
-*   Description: Source file for double linked list
-*        
-*   	 -Buffer_Full
+*   Description: header file for circbuff.h
+*           
+*    -Buffer_Full
 *		 -Buffer_Empty
 *		 -add_item
 *		 -remove_item
@@ -15,7 +15,7 @@
 *		 -Buffer_Free
 *		 -Buffer_Dump_length
 *		 -Buffer_Dump_items
-*  		 -Buffer_Size
+*  	 -Buffer_Size
 *	
 ********************************************************/
 
