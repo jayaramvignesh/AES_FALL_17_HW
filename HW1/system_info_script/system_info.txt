@@ -1,0 +1,8 @@
+
+Operating System Type : Linux
+OS distribution : Ubuntu
+Kernel version : 4.12.10
+Kernel Gcc version build : gcc version 5.4.0
+Kernel Build time : #1 SMP Mon Sep 4 22:48:52 MDT 2017
+Sytem information : 64bit
+Architecture is : little endian 
