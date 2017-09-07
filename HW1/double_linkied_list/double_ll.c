@@ -1,12 +1,12 @@
 /********************************************
 *   Authors:  Vignesh Jayaram
-*   Date Edited: 2 Sept 2017
+*   Date Edited: 9 Sept 2017
 *
 *   File: double_ll.c
 *
 *   Description: Source file for double linked list
 *        
-*   	 -dll_length
+*    -dll_length
 *		 -destroy_list
 *		 -print_list
 *		 -position_insert
