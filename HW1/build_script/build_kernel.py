@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
+import os
 import subprocess
 
+os.chdir('/home/vigi/linux-4.12.10')
 subprocess.call("sudo apt-get install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc",shell=True,stdout=None)
 
 subprocess.call("cp /boot/config-$(uname -r) .config",shell=True,stdout=None)
