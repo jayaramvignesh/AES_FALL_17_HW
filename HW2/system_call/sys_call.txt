@@ -1,0 +1,52 @@
+The below text is written in kernel/sys.c
+
+/*Adding a custom system call for buffer sorting*/
+/*Define 3 is because there are 3 arguments apart from the system call name*/
+SYSCALL_DEFINE3(sorted_buffer, int32_t*, unsorted, int32_t*, sorted, uint32_t, length)
+{
+  int32_t *buffer;
+	uint32_t len = length;	
+	uint32_t length1 = length*(sizeof(int32_t));
+	uint32_t i = 0;
+	uint32_t j = 0;
+	int32_t temp = 0;
+
+  buffer = (int32_t *)kmalloc(length1,GFP_KERNEL);
+  if(buffer == NULL)
+  {
+    printk("Allocation Problem");
+    return -ENOMEM;
+  }
+
+	printk("SYSTEM CALL ENTERED\n");
+
+
+  printk("Length of buffer is %d\n",length);
+
+
+  /*copying the contents to be sorted from user space to kernel space*/
+  if(copy_from_user(buffer, unsorted, length1))
+	{
+		printk("Error occured\n");
+		return -EFAULT;
+	}
+
+  /*printing the contents copied*/
+	for(i=0;i<len;i++)
+  {
+		printk("%d\n",*(buffer+i));
+	}
+
+	
+  printk("\nSorting: Started\n");
+
+ /*sorting the buffer*/
+  for(i =0; i<length;  i++)
+	{
+		for(j=i+1; j<length; j++)
+		{
+			if( *(buffer+i) > *(buffer+j) )
+			{
+				temp = *(buffer+i);
+				*(buffer+i) = *(buffer+j);
+				*(buffer+j) = temp;
