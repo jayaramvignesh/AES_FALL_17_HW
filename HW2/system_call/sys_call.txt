@@ -50,3 +50,23 @@ SYSCALL_DEFINE3(sorted_buffer, int32_t*, unsorted, int32_t*, sorted, uint32_t, l
 				temp = *(buffer+i);
 				*(buffer+i) = *(buffer+j);
 				*(buffer+j) = temp;
+			}
+		}
+	}
+
+
+  printk("\nsorting completed\n");
+ /*copying the sorted contents back to user space*/
+	if(copy_to_user(sorted,buffer,length1))
+	{
+		printk("Error occured\n");
+		return -EFAULT;	
+	}
+
+	printk("SYSTEM CALL EXIT\n");
+
+	return 0;
+
+}
+
+
