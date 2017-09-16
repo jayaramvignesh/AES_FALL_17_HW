@@ -25,9 +25,18 @@ int main()
 {
 
 	uint32_t length = BUFFER_LENGTH;
-	int32_t* unsorted = malloc(length*sizeof(uint32_t));
+
+  /*Validate Length*/
+  if(length == 0)
+  {
+    printf("length is zero\n");
+    return 0;
+  }
+  
+  int32_t* unsorted = malloc(length*sizeof(uint32_t));
 	int32_t* sorted = malloc(length*sizeof(uint32_t));
   
+  /*Check for NULL after malloc*/
   if(unsorted == NULL || sorted == NULL)
   {
     printf("/nERROR:MALLOC/n");
@@ -37,6 +46,7 @@ int main()
 	int i = 0;
 	long int return_value;	
 	
+  
 	random_int(unsorted,length);
 
 	printf("\nArray before sorting \n");
@@ -46,6 +56,7 @@ int main()
 	}
 
 
+  /*Sytem call*/
 	return_value = syscall(334,unsorted,sorted,length);
 	printf("\nreturn value is %ld\n",return_value);
 
@@ -55,6 +66,11 @@ int main()
 	{
 		printf("%d\n",*(sorted+i));
 	}
+
+  /*Free the allocated memory*/
+  free(unsorted);
+  free(sorted);
+
 
 }
 
