@@ -11,7 +11,10 @@ SYSCALL_DEFINE3(sorted_buffer, int32_t*, unsorted, int32_t*, sorted, uint32_t, l
 	uint32_t j = 0;
 	int32_t temp = 0;
 
+  /*Allocation of kernel space required for sorting*/
   buffer = (int32_t *)kmalloc(length1,GFP_KERNEL);
+
+  /*Checking if memory has been allocated*/
   if(buffer == NULL)
   {
     printk("Allocation Problem");

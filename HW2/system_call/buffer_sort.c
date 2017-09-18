@@ -33,6 +33,7 @@ int main()
     return 0;
   }
   
+  /*Allocating memory required to store the integers[for both before and after sorting]*/
   int32_t* unsorted = malloc(length*sizeof(uint32_t));
 	int32_t* sorted = malloc(length*sizeof(uint32_t));
   
@@ -46,7 +47,7 @@ int main()
 	int i = 0;
 	long int return_value;	
 	
-  
+  /*Call function to fill the buffer with random int values*/ 
 	random_int(unsorted,length);
 
 	printf("\nArray before sorting \n");
@@ -59,6 +60,7 @@ int main()
   /*Sytem call*/
 	return_value = syscall(334,unsorted,sorted,length);
 	printf("\nreturn value is %ld\n",return_value);
+
 
 
 	printf("\nArray after sorting: \n");
