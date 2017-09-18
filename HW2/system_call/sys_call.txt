@@ -11,6 +11,12 @@ SYSCALL_DEFINE3(sorted_buffer, int32_t*, unsorted, int32_t*, sorted, uint32_t, l
 	uint32_t j = 0;
 	int32_t temp = 0;
 
+  /*validating the parameters passed*/
+  if(sorted == NULL || unsorted == NULL || length == 0)
+  {
+	return -EINVAL;
+  }
+
   /*Allocation of kernel space required for sorting*/
   buffer = (int32_t *)kmalloc(length1,GFP_KERNEL);
 
@@ -29,46 +35,44 @@ SYSCALL_DEFINE3(sorted_buffer, int32_t*, unsorted, int32_t*, sorted, uint32_t, l
 
   /*copying the contents to be sorted from user space to kernel space*/
   if(copy_from_user(buffer, unsorted, length1))
-	{
-		printk("Error occured\n");
-		return -EFAULT;
-	}
-
-  /*printing the contents copied*/
-	for(i=0;i<len;i++)
   {
-		printk("%d\n",*(buffer+i));
-	}
+	printk("Error occured\n");
+	return -EFAULT;
+  } 
 
+ 
 	
   printk("\nSorting: Started\n");
 
  /*sorting the buffer*/
   for(i =0; i<length;  i++)
+  {
+	for(j=i+1; j<length; j++)
 	{
-		for(j=i+1; j<length; j++)
+		if( *(buffer+i) > *(buffer+j) )
 		{
-			if( *(buffer+i) > *(buffer+j) )
-			{
-				temp = *(buffer+i);
-				*(buffer+i) = *(buffer+j);
-				*(buffer+j) = temp;
-			}
+			temp = *(buffer+i);
+			*(buffer+i) = *(buffer+j);
+			*(buffer+j) = temp;
 		}
 	}
+  }
 
 
   printk("\nsorting completed\n");
  /*copying the sorted contents back to user space*/
-	if(copy_to_user(sorted,buffer,length1))
-	{
-		printk("Error occured\n");
-		return -EFAULT;	
-	}
+ if(copy_to_user(sorted,buffer,length1))
+ {
+	printk("Error occured\n");
+	return -EFAULT;	
+ }
 
-	printk("SYSTEM CALL EXIT\n");
+ printk("SYSTEM CALL EXIT\n");
 
-	return 0;
+ /*Free the allocated memory*/
+ kfree(buffer);
+
+ return 0;
 
 }
 
