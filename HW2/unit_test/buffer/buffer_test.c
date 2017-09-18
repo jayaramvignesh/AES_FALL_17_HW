@@ -6,6 +6,7 @@
 #include <setjmp.h>
 #include <cmocka.h>
 
+/*Function to test for NULL ptr in buffer full funtion*/
 void test_buffer_full_NULL(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -13,6 +14,7 @@ void test_buffer_full_NULL(void **state)
   assert_int_equal(return_value, NULL_PTR);
 }
 
+/*Function to test for NULL ptr in buffer empty funtion*/
 void test_buffer_empty_NULL(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -20,6 +22,7 @@ void test_buffer_empty_NULL(void **state)
   assert_int_equal(return_value, NULL_PTR);
 }
 
+/*Function to test for NULL ptr in buffer add funtion*/
 void test_buffer_add_NULL(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -27,6 +30,7 @@ void test_buffer_add_NULL(void **state)
   assert_int_equal(return_value, NULL_PTR);
 }
 
+/*Function to test for NULL ptr in buffer remove funtion*/
 void test_buffer_remove_NULL(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -35,6 +39,7 @@ void test_buffer_remove_NULL(void **state)
   assert_int_equal(return_value, NULL_PTR);
 }
 
+/*Function to test for NULL ptr in buffer free funtion*/
 void test_buffer_free_NULL(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -43,6 +48,7 @@ void test_buffer_free_NULL(void **state)
   assert_int_equal(return_value, NULL_PTR);
 }
 
+/*Function to test for NULL ptr in buffer dump{length} funtion*/
 void test_buffer_dump_length_NULL(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -50,6 +56,7 @@ void test_buffer_dump_length_NULL(void **state)
   assert_int_equal(return_value, NULL_PTR);
 }
 
+/*Function to test for NULL ptr in buffer dump{items} funtion*/
 void test_buffer_dump_items_NULL(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -57,6 +64,7 @@ void test_buffer_dump_items_NULL(void **state)
   assert_int_equal(return_value, NULL_PTR);
 }
 
+/*Function to test for NULL ptr in buffer size funtion*/
 void test_buffer_size_NULL(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -64,6 +72,7 @@ void test_buffer_size_NULL(void **state)
   assert_int_equal(return_value, NULL_PTR);
 }
 
+/*Function to test for length=0 in buffer init  funtion*/
 void test_buffer_init_length_ZERO(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -73,6 +82,7 @@ void test_buffer_init_length_ZERO(void **state)
   assert_int_equal(return_value, LENGTH_ZERO);
 }
 
+/*positive test for buffer init function*/
 void test_buffer_init(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -82,6 +92,7 @@ void test_buffer_init(void **state)
   assert_int_equal(return_value, SUCCESS);
 }
 
+/*positive test for buffer free function*/
 void test_buffer_free(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -92,6 +103,7 @@ void test_buffer_free(void **state)
   assert_int_equal(return_value, SUCCESS);
 }
 
+/*test to check if add fails when buffer full*/
 void test_buffer_add_fail(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -107,6 +119,7 @@ void test_buffer_add_fail(void **state)
   assert_int_equal(return_value, FAIL);
 }
 
+/*positive test for buffer add*/
 void test_buffer_add_pass(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -122,7 +135,7 @@ void test_buffer_add_pass(void **state)
   assert_int_equal(return_value, SUCCESS);
 }
 
-
+/*test to check if remove fails when buffer empty*/
 void test_buffer_remove_fail(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -142,6 +155,7 @@ void test_buffer_remove_fail(void **state)
   assert_int_equal(return_value, FAIL);
 }
 
+/*positive test for buffer remove function*/
 void test_buffer_remove_pass(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -159,6 +173,7 @@ void test_buffer_remove_pass(void **state)
   assert_int_equal(return_value, SUCCESS);
 }
 
+/*function to test if buffer is empty*/
 void test_buffer_empty_1(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -178,6 +193,7 @@ void test_buffer_empty_1(void **state)
   assert_int_equal(return_value, EMPTY);
 }
 
+/*to test empty buffer function when item is available*/
 void test_buffer_empty_2(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -195,6 +211,7 @@ void test_buffer_empty_2(void **state)
   assert_int_equal(return_value, AVAILABLE);
 }
 
+/*function to test if buffer is full*/
 void test_buffer_full_1(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -210,6 +227,7 @@ void test_buffer_full_1(void **state)
   assert_int_equal(return_value, FULL);
 }
 
+/*test buffer full function when item available*/
 void test_buffer_full_2(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -225,6 +243,7 @@ void test_buffer_full_2(void **state)
   assert_int_equal(return_value, AVAILABLE);
 }
 
+/*function to test buffer dump[items]*/
 void test_buffer_dump_items(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -240,6 +259,7 @@ void test_buffer_dump_items(void **state)
   assert_int_equal(return_value, SUCCESS);
 }
 
+/*function to test buffer dump[length]*/
 void test_buffer_dump_length(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -255,6 +275,7 @@ void test_buffer_dump_length(void **state)
   assert_int_equal(return_value, SUCCESS);
 }
 
+/*function to test buffer size*/
 void test_buffer_size(void **state)
 {
   cirbuff_t *cbuffer = NULL;
@@ -272,7 +293,7 @@ void test_buffer_size(void **state)
 
 
 
-
+/*main function*/
 int main(int argc, char **argv)
 {
     const struct CMUnitTest tests[] = {
