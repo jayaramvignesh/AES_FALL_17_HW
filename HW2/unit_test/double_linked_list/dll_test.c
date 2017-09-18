@@ -6,6 +6,7 @@
 #include <setjmp.h>
 #include <cmocka.h>
 
+/*function to test NULL pointer in length function*/
 void test_dll_length_NULL(void **state)
 {
   struct node* head= NULL;
@@ -13,6 +14,7 @@ void test_dll_length_NULL(void **state)
   assert_int_equal(return_value, NULL_PTR);
 }
 
+/*function to test NULL pointer in print function*/
 void test_dll_print_NULL(void **state)
 {
   struct node* head= NULL;
@@ -20,6 +22,7 @@ void test_dll_print_NULL(void **state)
   assert_int_equal(return_value, NULL_PTR);
 }
 
+/*function to test NULL pointer in destroy function*/
 void test_dll_destroy_NULL(void **state)
 {
   struct node* head= NULL;
@@ -27,6 +30,7 @@ void test_dll_destroy_NULL(void **state)
   assert_int_equal(return_value, NULL_PTR);
 }
 
+/*function to test NULL pointer in remove function*/
 void test_dll_remove_NULL(void **state)
 {
   struct node* head= NULL;
@@ -35,6 +39,7 @@ void test_dll_remove_NULL(void **state)
   assert_int_equal(return_value, NULL_PTR);
 }
 
+/*function to test insert function for empty list*/
 void test_dll_insert_empty_list(void **state)
 {
   struct node* head= NULL;
@@ -42,6 +47,7 @@ void test_dll_insert_empty_list(void **state)
   assert_int_equal(return_value, SUCCESS);
 }
 
+/*function to test insert function for adding item to middle of list*/
 void test_dll_insert_middle(void **state)
 {
   struct node* head= NULL;
@@ -55,6 +61,7 @@ void test_dll_insert_middle(void **state)
   assert_int_equal(return_value, SUCCESS);
 }
 
+/*function to test insert function for adding item at head*/
 void test_dll_insert_head(void **state)
 {
   struct node* head= NULL;
@@ -68,6 +75,7 @@ void test_dll_insert_head(void **state)
   assert_int_equal(return_value, SUCCESS);
 }
 
+/*function to test insert function for adding item at end*/
 void test_dll_insert_end(void **state)
 {
   struct node* head= NULL;
@@ -81,6 +89,7 @@ void test_dll_insert_end(void **state)
   assert_int_equal(return_value, SUCCESS);
 }
 
+/*function to test insert function [fail]*/
 void test_dll_insert_fail(void **state)
 {
   struct node* head= NULL;
@@ -94,6 +103,7 @@ void test_dll_insert_fail(void **state)
   assert_int_equal(return_value, FAIL);
 }
 
+/*function to test remove function [fail]*/
 void test_dll_remove_fail(void **state)
 {
   struct node* head= NULL;
@@ -108,6 +118,7 @@ void test_dll_remove_fail(void **state)
   assert_int_equal(return_value, FAIL);
 }
 
+/*function to test remove function [data at head]*/
 void test_dll_remove_head(void **state)
 {
   struct node* head= NULL;
@@ -122,6 +133,7 @@ void test_dll_remove_head(void **state)
   assert_int_equal(return_value, SUCCESS);
 }
 
+/*function to test remove function [data at middle]*/
 void test_dll_remove_middle(void **state)
 {
   struct node* head= NULL;
@@ -136,6 +148,7 @@ void test_dll_remove_middle(void **state)
   assert_int_equal(return_value, SUCCESS);
 }
 
+/*function to test remove function [data at end]*/
 void test_dll_remove_end(void **state)
 {
   struct node* head= NULL;
@@ -150,6 +163,7 @@ void test_dll_remove_end(void **state)
   assert_int_equal(return_value, SUCCESS);
 }
 
+/*to test destroy function*/
 void test_dll_destroy(void **state)
 {
   struct node* head= NULL;
@@ -163,6 +177,7 @@ void test_dll_destroy(void **state)
   assert_int_equal(return_value, SUCCESS);
 }
 
+/*to test length function*/
 void test_dll_length(void **state)
 {
   struct node* head= NULL;
@@ -176,6 +191,7 @@ void test_dll_length(void **state)
   assert_int_equal(return_value, 6);
 }
 
+/*to test print list function*/
 void test_dll_print(void **state)
 {
   struct node* head= NULL;
@@ -188,6 +204,8 @@ void test_dll_print(void **state)
   states return_value = print_list(head);
   assert_int_equal(return_value, SUCCESS);
 }
+
+/*main function*/
 int main(int argc, char **argv)
 {
     const struct CMUnitTest tests[] = {
