@@ -3,16 +3,21 @@
 #include <linux/module.h>
 #include <linux/timer.h>
 
+
+/*License Declaration*/
 MODULE_LICENSE("GPL");
 
+/*Macro for timer expiration in milliseconds*/
 #define EXPIRATION_ms 500
 
+/*Defining instance of timer_list structure*/
 struct timer_list vigi_timer;
 
+/*callback function for timer*/
 void vigi_timer_callback(unsigned long data)
 {
 
-    /*Restarting the timer*/
+   /*Restarting the timer*/
    int return_value; 
    return_value = mod_timer(&vigi_timer,jiffies + msecs_to_jiffies(EXPIRATION_ms));
    if(return_value)
@@ -27,6 +32,7 @@ void vigi_timer_callback(unsigned long data)
 
 }
 
+/*init function for kernel module*/
 int timer_init_module(void)
 {
 	int return_value;
@@ -48,11 +54,12 @@ int timer_init_module(void)
   return 0;
 }
 
-
+/*exit function for kernel module*/
 void timer_cleanup_module(void)
 {
   int return_value;
 
+  /*Deleting the timer*/
   return_value = del_timer(&vigi_timer);
   if(return_value)
   {
