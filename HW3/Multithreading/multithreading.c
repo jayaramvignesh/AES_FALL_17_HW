@@ -148,10 +148,6 @@ void signal_handler()
   /*destroy both the mutex*/
   pthread_mutex_destroy(&count_lock);
   pthread_mutex_destroy(&file_lock);
- 
-  /*exit from both the pthreads*/
-  pthread_exit(NULL);
-  pthread_exit(NULL);
 
   printf("\nBYE BYE!! END OF PROGRAM!!\n");
   
@@ -344,11 +340,12 @@ int main()
   int status;
   int thread_status;
 
-  /*signal_handler for SIGINT*/
-  signal(SIGINT,signal_handler);
   
   sigset_t sigmask;
-  struct sigaction action;
+  struct sigaction action; 
+
+  sigset_t sigint_mask;
+  struct sigaction sigint_handler;
   int set1 = 0;
   
   /*get pid of current process*/
@@ -357,8 +354,23 @@ int main()
   printf("\nPID i %d\n",p);
 
   /*set up signal mask to block all in main thread*/
+  sigfillset(&sigint_mask);
+
+ /*Set up signal handlers for SIGINT*/
+  sigint_handler.sa_flags = 0;
+  sigint_handler.sa_handler = signal_handler;
+  if((sigaction(SIGINT, &sigint_handler, (struct sigaction *)0)) == -1)
+  {
+    printf("\nERROR IN ADDING SIGINT HANDLER: SIGACTION FAILED\n");
+  }
+  else
+  {
+    printf("\nSIGINT HANDLER INSTALLATION SUCCESSFULL\n");
+  }
+
+
+  /*set up signal mask to block all in main thread*/
   sigfillset(&sigmask);
-  pthread_sigmask(SIG_BLOCK, &sigmask, (sigset_t *)0);
 
   /*Set up signal handlers for SIGUSR1*/
   action.sa_flags = 0;
@@ -366,8 +378,7 @@ int main()
   sigaction(SIGUSR1, &action, (struct sigaction *)0);
   action.sa_handler = sigusr2_handler;
   sigaction(SIGUSR2, &action, (struct sigaction *)0);
- 
-  /*take filename from user*/
+
   printf("\nPlease give the filename\n");
   scanf("%s%*c",filename);
   printf("\nFilename is %s\n",filename);
@@ -412,7 +423,6 @@ int main()
       fwrite(buffer,1,len,fp);
       sleep(0.5);
       len = 0;
-      signal(SIGQUIT,signal_handler);
     }
     pthread_mutex_unlock(&file_lock);
     printf("\nFILE MUTEX UNLOCKED INSIDE MAIN\n");
