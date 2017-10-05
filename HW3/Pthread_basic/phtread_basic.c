@@ -1,4 +1,16 @@
-/*pthread code to set stacksize*/
+/********************************************
+*   Authors: vignesh jayaram
+*   date edited: 5th Oct 2017
+*
+*   file: phtread_basic.c
+*
+*   description: source file for clone and exec
+*      
+*      - thread_function
+*   
+*	
+********************************************************/
+
 
 #include <pthread.h>
 #include<stdio.h>
@@ -58,13 +70,13 @@ int main(int argc , char *argv[])
 
   /*----------PTHREAD_ATTR_GET_DEFAULT()--------------*/
   /*getting default attribute values and printing them*/
-  int detached_state; 
+  int32_t detached_state; 
   pthread_attr_getdetachstate(&thread_attr,&detached_state);
 
   size_t guard_size;
   pthread_attr_getguardsize(&thread_attr,&guard_size);
 
-  int sched_policy;
+  int32_t sched_policy;
   pthread_attr_getschedpolicy(&thread_attr,&sched_policy);
 
   /*getting default stack size*/

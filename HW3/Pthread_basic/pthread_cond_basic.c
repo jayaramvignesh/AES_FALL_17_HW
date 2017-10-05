@@ -1,3 +1,16 @@
+/********************************************
+*   Authors: vignesh jayaram
+*   date edited: 5th Oct 2017
+*
+*   file: pthread_cond_basic.c
+*
+*   description: source file for clone and exec
+*      
+*      - function1
+*      - function2
+*	
+********************************************************/
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,7 +20,7 @@
 #define COUNT1 3
 #define COUNT2 6
 
-int counter = 0;
+uint32_t counter = 0;
 
 pthread_mutex_t count_mutex;
 pthread_cond_t count_cond;
@@ -93,7 +106,7 @@ int main()
   }
 
 
-  int iret1,iret2;
+  int32_t iret1,iret2;
   
   if((iret1 = pthread_create(&thread1, NULL, &function1,NULL)))
   {
@@ -110,10 +123,18 @@ int main()
   pthread_join(thread2,NULL);  
   
   /*---------------PTHREAD_MUTEX_DESTROY-------------------*/
-  pthread_mutex_destroy(&count_mutex);
+  iret1 = pthread_mutex_destroy(&count_mutex);
+  if(iret1)
+  {
+    printf("\nPthread mutex destroy: FAILED\n");
+  }
 
   /*---------------PTHREAD_COND_DESTROY--------------------*/
-  pthread_cond_destroy(&count_cond);
+  iret2 =  pthread_cond_destroy(&count_cond);
+  if(iret2)
+  {
+    printf("\nPthread cond destroy: FAILED\n");
+  }
 
   pthread_exit(NULL);
 
