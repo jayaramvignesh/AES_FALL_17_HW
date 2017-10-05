@@ -1,3 +1,19 @@
+/********************************************
+*   Authors: vignesh jayaram
+*   date edited: 5th Oct 2017
+*
+*   file: hw3.c
+*
+*   description: source file for listing processes
+*
+*   -module_start
+*
+*   -module_cleanup
+*   
+*	
+********************************************************/
+
+
 #include<linux/sched.h>
 #include<linux/module.h>
 #include<linux/init.h>
@@ -6,6 +22,8 @@
 #include<linux/list.h>
 
 MODULE_LICENSE("GPL");
+MODULE_AUTHOR("VIGNESH JAYARAM");
+MODULE_DESCRIPTION("List all the running process");
 
 int module_start(void)
 {
@@ -15,7 +33,7 @@ int module_start(void)
   /*create a pointer instance of list_head*/
   struct list_head* current_ptr;
 
-  int no_children;
+  uint32_t no_children;
   
   printk(KERN_INFO "\nMODULE:INIT FUNCTION\n");
 

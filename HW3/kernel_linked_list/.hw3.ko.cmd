@@ -1,0 +1,1 @@
+cmd_/home/vigi/AES_FALL_17_HW/HW3/kernel_linked_list/hw3.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/vigi/AES_FALL_17_HW/HW3/kernel_linked_list/hw3.ko /home/vigi/AES_FALL_17_HW/HW3/kernel_linked_list/hw3.o /home/vigi/AES_FALL_17_HW/HW3/kernel_linked_list/hw3.mod.o ;  true
