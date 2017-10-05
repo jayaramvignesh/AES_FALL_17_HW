@@ -40,6 +40,8 @@ word_map words[MAX_WORDS];
 /*create a global structure instance*/
 file_stats statistics;
 
+uint32_t exit_value = 0;
+
 pthread_t th1_id, th2_id;
 
 /*create a global file pointer*/
@@ -145,14 +147,9 @@ void lowercase_words(char *c)
 /*Signal handler for SIGINT*/
 void signal_handler()
 {
-  /*destroy both the mutex*/
-  pthread_mutex_destroy(&count_lock);
-  pthread_mutex_destroy(&file_lock);
-
-  printf("\nBYE BYE!! END OF PROGRAM!!\n");
-  
-  /*exit from the main program*/
-  exit(1);
+  exit_value = 1;
+  fclose(fp);
+  pthread_kill(th1_id, SIGUSR1); 
 }
 
 /*Signal handler for SIGUSR1*/
@@ -164,10 +161,7 @@ static void sigusr1_handler(int sig)
     /*lock the mutex*/
     pthread_mutex_lock(&file_lock);
     pthread_mutex_lock(&count_lock);
- 
-    printf("\nFILE MUTEX LOCKED INSIDE SIGUSR1\n");
-    printf("\nWORD MUTEX LOCKED INSIDE SIGUSR1\n");
-   
+
     /*check if file pointer is NULL*/
     if(fp == NULL)
     {
@@ -230,8 +224,6 @@ static void sigusr1_handler(int sig)
     /*unlock the mutex*/
     pthread_mutex_unlock(&file_lock);
     pthread_mutex_unlock(&count_lock);
-    printf("\nFILE MUTEX UNLOCKED INSIDE SIGUSR1\n");
-    printf("\nWORD MUTEX UNLOCKED INSIDE SIGUSR1\n");
 }
 
 /*function for thread 1*/
@@ -243,7 +235,6 @@ void *thread1_function(void *param)
     sigset_t set;
     int set1 = 0;
     
-//    sigfillset(&set);
     /*add SIGUSR1 to the set*/
     if(sigaddset(&set,SIGUSR1) == -1)
     {
@@ -253,6 +244,16 @@ void *thread1_function(void *param)
 
     /*wait here till signal is received*/
     sigwait(&set,&set1);
+      
+    if(exit_value == 1)
+    {
+      status = pthread_kill(th2_id, SIGUSR2);
+      if(status < 0)
+      {
+        perror("ERROR: PTHREAD KILL");
+      }
+      break;
+    }
 
     /*if signal is SIGUSR1 then goto handler*/
     if(set1  == SIGUSR1)
@@ -264,19 +265,19 @@ void *thread1_function(void *param)
   
     /*calling pthread kill*/
     status = pthread_kill(th2_id, SIGUSR2);
-  
     if(status < 0)
     {
       perror("ERROR: PTHREAD KILL");
     }
   
   }
+  printf("\nEXIT THREAD1\n");
+  pthread_exit(NULL);
 }
 
 /*Handler for SIGUSR2*/
 static void sigusr2_handler(int sig)
 {
-    printf("\nINSIDE SIGUSR2 SIGNAL HANDLER\n");
  
     /*lock the word mutex*/
     pthread_mutex_lock(&count_lock);
@@ -300,8 +301,6 @@ static void sigusr2_handler(int sig)
     statistics.no_top_repeated_words = 0;
     /*unlock the mutex*/
     pthread_mutex_unlock(&count_lock);
-
-    printf("\nWORD MUTEX UNLOCKED INSIDE SIGUSR2\n");
 }
 
 /*function for thread 2*/
@@ -323,6 +322,12 @@ void *thread2_function(void *param)
    
     /*wait for signal SIGUSR2*/
     sigwait(&set,&set1);
+    
+    if(exit_value == 1)
+    {
+      break;
+    }
+      
     if(set1  == SIGUSR2)
     {
       sigusr2_handler(set1);
@@ -330,8 +335,10 @@ void *thread2_function(void *param)
  
     printf("\nRETURNED AFTER SIGUSR2 HANDLER\n");
   
-  }
-  
+  } 
+  printf("\nEXIT THREAD2\n");
+  pthread_exit(NULL);
+
 }
 
 int main()
@@ -405,35 +412,43 @@ int main()
   } 
   printf("\ncreated pthread\n");
   
-  sleep(0.5);
 
-  while(1)
+   while(1)
   {
-    pthread_mutex_lock(&file_lock);
-    printf("\nFILE MUTEX LOCKED INSIDE MAIN\n");
+    if(exit_value == 1)
+    {
+      break;
+    }
     
     printf("\nWrite to the given file\n\n");
     int len = 0;
     char c;
-  
+
     /*take input from user for file till ctrl+d*/
     while(fgets(ptr,SIZE,stdin)!=NULL)
     {
       len = strlen(ptr);
+      pthread_mutex_lock(&file_lock);
       fwrite(buffer,1,len,fp);
-      sleep(0.5);
+      pthread_mutex_unlock(&file_lock);
       len = 0;
     }
-    pthread_mutex_unlock(&file_lock);
-    printf("\nFILE MUTEX UNLOCKED INSIDE MAIN\n");
 
-    sleep(1);
     /*calling pthread kill*/
     status = pthread_kill(th1_id, SIGUSR1);
-    sleep(2);
+    sleep(3);
     if(status < 0)
     {
       perror("ERROR: PTHREAD KILL");
     }
   }
+   pthread_mutex_unlock(&count_lock);
+   pthread_mutex_destroy(&count_lock);
+   pthread_mutex_unlock(&file_lock);
+   pthread_mutex_destroy(&file_lock);
+ 
+   pthread_join(th1_id,NULL);
+   pthread_join(th2_id,NULL);
+   printf("\nEXIT GRACEFULLY\n");
+    return 0;
 }
