@@ -1,3 +1,15 @@
+/********************************************
+*   Authors: vignesh jayaram
+*   date edited: 5th Oct 2017
+*
+*   file: fork_exec.c
+*
+*   description: source file for fork and exec
+*      
+********************************************************/
+
+
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdint.h>
@@ -30,11 +42,12 @@ int main()
   /*calculate id*/
   child_process_id = fork();
 
+  /*check for error in fork*/
   if(child_process_id == -1)
   {
     printf("\nERROR:FORK\n");
     exit(1);
-   }
+  }
   else if(child_process_id == 0)
   {
     /*call exec command*/
@@ -50,14 +63,15 @@ int main()
         exit(1);
      }
 
+    /*record the end time*/ 
     end =  clock();
     printf("\nend time %ld\n",end);
 
     /*time taken for fork+exec */
     printf("\nTOTAL TIME TAKEN %ld\n",(end-start));
   
-     printf("\nEND OF PROGRAM\n");
- }
+    printf("\nEND OF PROGRAM\n");
+  }
 }
 
 

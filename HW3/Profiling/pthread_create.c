@@ -1,4 +1,16 @@
-/*pthread code to set stacksize*/
+/********************************************
+*   Authors: vignesh jayaram
+*   date edited: 5th Oct 2017
+*
+*   file: pthread_create.c
+*
+*   description: source file for pthread_create
+*      
+*      - thread_function
+*   
+*	
+********************************************************/
+
 
 #define _GNU_SOURCE
 
@@ -26,7 +38,7 @@ void *thread_function(void *data)
 
 int main(int argc , char *argv[])
 {
-  int return_value;
+  int32_t return_value;
   pthread_t thread1;
   
   clock_t start;
@@ -54,7 +66,7 @@ int main(int argc , char *argv[])
 
   /*time to taken for create+function execution*/
   long int diff = (long)(end-start); 
-  printf("\nTime taken for clone and exec is %ld\n\n",diff);
+  printf("\nTime taken for pthread_create is %ld\n\n",diff);
 
   /*exit*/
   pthread_exit(NULL);

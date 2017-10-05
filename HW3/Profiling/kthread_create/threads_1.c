@@ -1,3 +1,19 @@
+/********************************************
+*   Authors: vignesh jayaram
+*   date edited: 5th Oct 2017
+*
+*   file: threads_1.c
+*
+*   description: source file for kthread_Create
+*      
+*      - kernel_thread_function
+*      - kernel_thread_init
+*      - kernel_thread_cleanup
+*   
+*	
+********************************************************/
+
+
 #include <linux/init.h>
 #include <linux/kernel.h>
 #include <linux/module.h>
@@ -48,6 +64,11 @@ int kernel_thread_init(void)
     printk(KERN_INFO "\nINSIDE IF\n");
     wake_up_process(thread1);
   }
+  else
+  {
+    printk(KERN_INFO "ERRROR");
+    return ;
+  }
 
   return 0;
 }
@@ -55,11 +76,6 @@ int kernel_thread_init(void)
 /*clean up function*/
 void kernel_thread_cleanup(void)
 {
-  int return_value = 1;
-//  return_value = kthread_stop(thread1);
-  if(!return_value)
-    printk(KERN_INFO "\nTHREAD 1 STOPPPED\n");
-
   printk(KERN_INFO "\nCLEAN UP\n");
 }
 

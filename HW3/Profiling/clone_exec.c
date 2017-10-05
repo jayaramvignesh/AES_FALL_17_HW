@@ -1,3 +1,18 @@
+/********************************************
+*   Authors: vignesh jayaram
+*   date edited: 5th Oct 2017
+*
+*   file: clone_exec.c
+*
+*   description: source file for clone and exec
+*      
+*      - child_function
+*   
+*	
+********************************************************/
+
+
+
 #define _GNU_SOURCE
 
 #include <sched.h>
