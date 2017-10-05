@@ -1,3 +1,26 @@
+/********************************************
+*   Authors: vignesh jayaram
+*   date edited: 5th Oct 2017
+*
+*   file: multithreading.c
+*
+*   description: source file for clone and exec
+*      
+*      - word_insert
+*      - word_sort
+*      - remove character
+*      - remove_non_alphabetic
+*      - lowercase_words
+*      - check_alphabet
+*	     - signal_handler
+*	     - sigusr1_hadnler
+*	     - sigusr2_handler
+*      - thread1_function
+*      - thread2_function
+**
+********************************************************/
+
+
 #define _POSIX_C_SOURCE 199506L
 
 #include <errno.h>
@@ -20,17 +43,17 @@ char filename[100] = "";
 /*structure to store the calculate statistics of file read*/
 typedef struct
 {
-  int line_cnt;
-  int char_cnt;
-  int word_cnt;
-  int no_top_repeated_words;
+  uint32_t line_cnt;
+  uint32_t char_cnt;
+  uint32_t word_cnt;
+  uint32_t no_top_repeated_words;
 }file_stats;
 
 /*structure for frequenct word info*/
 typedef struct words_1
 {
   char s[MAX_WORD_SIZE];
-  int freq;
+  uint32_t freq;
 }word_map;
 
 /*create a structure instance for the word frequency*/
@@ -54,7 +77,7 @@ void word_insert(word_map *words, int* no_of_words, char *c)
 {
 
   /*search if word is present nad if yes increment freq*/
-  for(int i = 0; i< *no_of_words; i++)
+  for(uint32_t i = 0; i< *no_of_words; i++)
   {
     if(strcmp(c,words[i].s) == 0)
     {
@@ -87,7 +110,7 @@ void word_insert(word_map *words, int* no_of_words, char *c)
 }
 
 /*sort the words in descending order*/
-int word_sort(word_map *first, word_map *second)
+int32_t word_sort(word_map *first, word_map *second)
 {
   if(first->freq < second->freq)
     return +1;
@@ -97,7 +120,7 @@ int word_sort(word_map *first, word_map *second)
 }
 
 /*check if alphabets*/
-int check_alphabets(char c)
+int32_t check_alphabets(char c)
 { 
   if(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z')
   {
@@ -123,7 +146,7 @@ void remove_character(char *c, int n)
 /*remove non alphabetic characters*/
 void remove_non_alphabetic(char *c)
 {
-  int i;
+  uint32_t i;
   for( i = 0; c[i]; i++)
   {
     if(check_alphabets(c[i]) == 0)
@@ -136,7 +159,7 @@ void remove_non_alphabetic(char *c)
 /*make all letters lowercase*/
 void lowercase_words(char *c)
 {
-  int i;
+  uint32_t i;
   for(i=0; c[i]; i++)
   {
     c[i] = tolower(c[i]);
@@ -149,7 +172,11 @@ void signal_handler()
 {
   exit_value = 1;
   fclose(fp);
-  pthread_kill(th1_id, SIGUSR1); 
+  int32_t status = pthread_kill(th1_id, SIGUSR1); 
+  if(status < 0)
+  {
+      perror("ERROR: PTHREAD KILL");
+   }
 }
 
 /*Signal handler for SIGUSR1*/
@@ -194,7 +221,7 @@ static void sigusr1_handler(int sig)
       /*rewind file pointer to start of function*/
       rewind(fp);
       char input_word[1000];
-      int i,no_of_words;
+      uint32_t no_of_words;
 
       no_of_words = 0;
       while(fscanf(fp,"%1023s",input_word) == 1)
@@ -229,11 +256,11 @@ static void sigusr1_handler(int sig)
 /*function for thread 1*/
 void *thread1_function(void *param)
 {
-  int status;
+  int32_t status;
   while(1)
   {
     sigset_t set;
-    int set1 = 0;
+    int32_t set1 = 0;
     
     /*add SIGUSR1 to the set*/
     if(sigaddset(&set,SIGUSR1) == -1)
@@ -290,7 +317,7 @@ static void sigusr2_handler(int sig)
     printf("\nchar Count is %d\n",statistics.char_cnt);
     
     printf("\nTOP 5 repeated words are\n");
-    for(int i = 0; i<statistics.no_top_repeated_words; i++)
+    for(uint32_t i = 0; i<statistics.no_top_repeated_words; i++)
     {
       printf("%s\t%d\n",words[i].s,words[i].freq);
     }
@@ -306,12 +333,12 @@ static void sigusr2_handler(int sig)
 /*function for thread 2*/
 void *thread2_function(void *param)
 {
-  int status;
+  int32_t status;
  
   while(1)
   {
     sigset_t set;
-    int set1 = 0;
+    int32_t set1 = 0;
 
     /*add SIGUSR2 to set*/
     if(sigaddset(&set,SIGUSR2) == -1)
@@ -343,9 +370,9 @@ void *thread2_function(void *param)
 
 int main()
 { 
-  int th_param = 1;
-  int status;
-  int thread_status;
+  int32_t th_param = 1;
+  int32_t status;
+  int32_t thread_status;
 
   
   sigset_t sigmask;
@@ -382,9 +409,15 @@ int main()
   /*Set up signal handlers for SIGUSR1*/
   action.sa_flags = 0;
   action.sa_handler = sigusr1_handler;
-  sigaction(SIGUSR1, &action, (struct sigaction *)0);
+  if((sigaction(SIGUSR1, &action, (struct sigaction *)0)) == -1)
+  {
+    printf("\nERROR IN ADDING SIGINT HANDLER: SIGACTION FAILED\n");
+  }
   action.sa_handler = sigusr2_handler;
-  sigaction(SIGUSR2, &action, (struct sigaction *)0);
+  if((sigaction(SIGUSR2, &action, (struct sigaction *)0)))
+  {
+    printf("\nERROR IN ADDING SIGINT HANDLER: SIGACTION FAILED\n");
+  }
 
   printf("\nPlease give the filename\n");
   scanf("%s%*c",filename);
@@ -443,12 +476,18 @@ int main()
     }
   }
    pthread_mutex_unlock(&count_lock);
-   pthread_mutex_destroy(&count_lock);
+   if(pthread_mutex_destroy(&count_lock))
+   {
+      printf("\nCOUNT MUTEX DESTROY: UNSUCCESFUL\n");
+   }
    pthread_mutex_unlock(&file_lock);
-   pthread_mutex_destroy(&file_lock);
+   if(pthread_mutex_destroy(&file_lock))
+   {
+      printf("\nFILE MUTEX DESTROY: UNSUCCESFUL\n");
+   }
  
    pthread_join(th1_id,NULL);
    pthread_join(th2_id,NULL);
    printf("\nEXIT GRACEFULLY\n");
-    return 0;
+   return 0;
 }
